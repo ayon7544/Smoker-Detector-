@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smoker Predictor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f9;
+        align-items: center;
+        justify-content: center;
+        padding-left: 100px;
+        padding-right: 100px;
+      }
+      h2 {
+        text-align: center;
+      }
+      .slider-container {
+        margin-left: 300px;
+        margin-right: 300px;
+        margin-bottom: 15px;
+      }
+      .slider {
+        background: linear-gradient(to right, green 0%, yellow 0%, red 0%);
+        -webkit-appearance: none;
+        width: 100%;
+        height: 25px;
+        border-radius: 5px;
+        margin: 5px 0;
+        transition: background 0.2s ease;
+      }
+
+      .slider::-webkit-slider-runnable-track {
+        height: 8px;
+      }
+
+      .slider::-moz-range-track {
+        height: 8px;
+      }
+
+      .slider:focus {
+        outline: none;
+      }
+      .value-label {
+        font-weight: bold;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f2f5;
+      }
+      h2 {
+        text-align: center;
+        color: #444;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+      .form-container {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+      }
+      label {
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: #333;
+      }
+
+      /* Slider Styles */
+      .slider-container {
+        margin-bottom: 20px;
+      }
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(
+          to right,
+          #4caf50 0%,
+          #ffeb3b 50%,
+          #f44336 100%
+        );
+        border-radius: 10px;
+        outline: none;
+        transition: background 0.4s;
+      }
+      .slider:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background-color: #4caf50;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      /* Labels */
+      .value-label {
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #555;
+      }
+
+      /* Input Fields */
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-top: 5px;
+      }
+
+      /* Submit Button */
+      .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px; /* Adjust as needed for spacing */
+      }
+
+      button {
+        width: 30%;
+        padding: 12px;
+        background-color: #4caf50;
+        color: white;
+        font-size: 1rem;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        align-items: center;
+        justify-content: center;
+      }
+      button:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+      }
+
+      /* Result Display */
+      #predictionResult {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Smoker OR Non-Smoker</h2>
+
+    <form id="predictionForm" method="POST">
+      <!-- Categorical Inputs -->
+      <div class="slider-container">
+        <label for="gender">Gender (0 for Female, 1 for Male):</label><br />
+        <input
+          type="number"
+          id="gender"
+          name="gender"
+          min="0"
+          max="1"
+          required
+          value="1"
+        /><br /><br />
+      </div>
+
+      <!-- Numerical Inputs -->
+      <div class="slider-container">
+        <label for="age">Age:</label><br />
+        <input
+          type="range"
+          id="age"
+          class="slider"
+          name="age"
+          min="0"
+          max="85"
+          value="42"
+        /><br />
+        <span id="ageValue" class="value-label">42</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="height">Height (cm):</label><br />
+        <input
+          type="range"
+          id="height"
+          class="slider"
+          min="100"
+          name="height"
+          max="190"
+          value="145"
+        /><br />
+        <span id="heightValue" class="value-label">145</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="weight">Weight (kg):</label><br />
+        <input
+          type="range"
+          name="weight"
+          id="weight"
+          class="slider"
+          min="30"
+          max="135"
+          value="82"
+        /><br />
+        <span id="weightValue" class="value-label">82</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="waist">Waist (cm):</label><br />
+        <input
+          type="range"
+          id="waist"
+          name="waist"
+          class="slider"
+          min="50"
+          max="129"
+          value="90"
+        /><br />
+        <span id="waistValue" class="value-label">90</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="eyesight_left">Eyesight (Left):</label><br />
+        <input
+          type="range"
+          id="eyesight_left"
+          name="eyesight_left"
+          class="slider"
+          min="0"
+          max="9.9"
+          value="4.95"
+        /><br />
+        <span id="eyesight_leftValue" class="value-label">4.95</span
+        ><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="eyesight_right">Eyesight (Right):</label><br />
+        <input
+          type="range"
+          id="eyesight_right"
+          name="eyesight_right"
+          class="slider"
+          min="0"
+          max="9.9"
+          value="4.95"
+        /><br />
+        <span id="eyesight_rightValue" class="value-label">4.95</span
+        ><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="hearing_left">Hearing (Left):</label><br />
+        <input
+          type="range"
+          name="hearing_left"
+          id="hearing_left"
+          class="slider"
+          min="0"
+          max="10"
+          value="5"
+        /><br />
+        <span id="hearing_leftValue" class="value-label">5</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="hearing_right">Hearing (Right):</label><br />
+        <input
+          type="range"
+          name="hearing_right"
+          id="hearing_right"
+          class="slider"
+          min="0"
+          max="10"
+          value="5"
+        /><br />
+        <span id="hearing_rightValue" class="value-label">5</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="systolic">Systolic Blood Pressure:</label><br />
+        <input
+          type="range"
+          id="systolic"
+          name="systolic"
+          class="slider"
+          min="80"
+          max="200"
+          value="140"
+        /><br />
+        <span id="systolicValue" class="value-label">140</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="relaxation">Relaxation Blood Pressure:</label><br />
+        <input
+          type="range"
+          name="relaxation"
+          id="relaxation"
+          class="slider"
+          min="60"
+          max="120"
+          value="90"
+        /><br />
+        <span id="relaxationValue" class="value-label">90</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="fasting_blood_sugar">Fasting Blood Sugar (mg/dL):</label
+        ><br />
+        <input
+          type="range"
+          name="fasting_blood_sugar"
+          id="fasting_blood_sugar"
+          class="slider"
+          min="50"
+          max="200"
+          value="125"
+        /><br />
+        <span id="fasting_blood_sugarValue" class="value-label">125</span
+        ><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="cholesterol">Cholesterol (mg/dL):</label><br />
+        <input
+          type="range"
+          name="cholesterol"
+          id="cholesterol"
+          class="slider"
+          min="100"
+          max="300"
+          value="200"
+        /><br />
+        <span id="cholesterolValue" class="value-label">200</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="triglyceride">Triglyceride (mg/dL):</label><br />
+        <input
+          type="range"
+          id="triglyceride"
+          name="triglyceride"
+          class="slider"
+          min="50"
+          max="300"
+          value="175"
+        /><br />
+        <span id="triglycerideValue" class="value-label">175</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="HDL">HDL (mg/dL):</label><br />
+        <input
+          type="range"
+          name="HDL"
+          id="HDL"
+          class="slider"
+          min="30"
+          max="100"
+          value="65"
+        /><br />
+        <span id="HDLValue" class="value-label">65</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="LDL">LDL (mg/dL):</label><br />
+        <input
+          type="range"
+          name="LDL"
+          id="LDL"
+          class="slider"
+          min="50"
+          max="150"
+          value="100"
+        /><br />
+        <span id="LDLValue" class="value-label">100</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="hemoglobin">Hemoglobin (g/dL):</label><br />
+        <input
+          type="range"
+          name="hemoglobin"
+          id="hemoglobin"
+          class="slider"
+          min="10"
+          max="20"
+          value="15"
+        /><br />
+        <span id="hemoglobinValue" class="value-label">15</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="urine_protein">Urine Protein (mg/dL):</label><br />
+        <input
+          type="range"
+          name="urine_protein"
+          id="urine_protein"
+          class="slider"
+          min="0"
+          max="100"
+          value="10"
+        /><br />
+        <span id="urine_proteinValue" class="value-label">10</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="serum_creatinine">Serum Creatinine (mg/dL):</label><br />
+        <input
+          type="range"
+          name="serum_creatinine"
+          id="serum_creatinine"
+          class="slider"
+          min="0.5"
+          max="2"
+          value="1.0"
+        /><br />
+        <span id="serum_creatinineValue" class="value-label">1.0</span
+        ><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="AST">AST (U/L):</label><br />
+        <input
+          type="range"
+          name="AST"
+          id="AST"
+          class="slider"
+          min="0"
+          max="100"
+          value="40"
+        /><br />
+        <span id="ASTValue" class="value-label">40</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="ALT">ALT (U/L):</label><br />
+        <input
+          type="range"
+          id="ALT"
+          name="ALT"
+          class="slider"
+          min="0"
+          max="100"
+          value="40"
+        /><br />
+        <span id="ALTValue" class="value-label">40</span><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="GTP">GTP (U/L):</label><br />
+        <input
+          type="range"
+          name="GTP"
+          id="GTP"
+          class="slider"
+          min="0"
+          max="100"
+          value="40"
+        /><br />
+        <span id="GTPValue" class="value-label">40</span><br /><br />
+      </div>
+
+      <!-- Categorical Inputs for oral, dental caries, tartar -->
+      <div class="slider-container">
+        <label for="oral"
+          >Oral Health Status (0: No issues, 1: Has issues):</label
+        ><br />
+        <input
+          type="number"
+          id="oral"
+          name="oral"
+          min="0"
+          max="1"
+          required
+          value="0"
+        /><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="dental_caries"
+          >Dental Caries (0: No issues, 1: Has issues):</label
+        ><br />
+        <input
+          type="number"
+          id="dental_caries"
+          name="dental_caries"
+          min="0"
+          max="1"
+          required
+          value="0"
+        /><br /><br />
+      </div>
+
+      <div class="slider-container">
+        <label for="tartar">Tartar (0: No issues, 1: Has issues):</label><br />
+        <input
+          type="number"
+          name="tartar"
+          id="tartar"
+          min="0"
+          max="1"
+          required
+          value="0"
+        /><br /><br />
+      </div>
+      <div class="button-container">
+        <button type="submit">Predict Smoking Status</button>
+      </div>
+    </form>
+
+    <div id="predictionResult"></div>
+
+    <script>
+      // Function to update the value display next to each slider
+      function updateSliderValue(sliderId, valueId) {
+        const slider = document.getElementById(sliderId);
+        const valueLabel = document.getElementById(valueId);
+        slider.addEventListener("input", () => {
+          valueLabel.textContent = slider.value;
+        });
+      }
+
+      // Function to update the slider background color based on the value
+      function updateSliderBackground(slider) {
+        var value =
+          ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+        // Set background as a gradient that goes from green to red
+        slider.style.background = `linear-gradient(to right, green ${value}%, yellow ${value}%, red ${value}%)`;
+      }
+
+      const form = document.getElementById("predictionForm");
+      const resultDiv = document.getElementById("predictionResult");
+
+      // Add event listeners to update the slider background dynamically
+      const sliders = document.querySelectorAll(".slider");
+      sliders.forEach((slider) => {
+        updateSliderBackground(slider); // Initial background update when the page loads
+
+        slider.addEventListener("input", () => {
+          updateSliderBackground(slider); // Update background on slider input
+          const valueLabel = document.getElementById(`${slider.id}Value`);
+          valueLabel.textContent = slider.value;
+        });
+      });
+    </script>
+  </body>
+</html>

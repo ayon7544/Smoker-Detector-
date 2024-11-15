@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form Results</title>
+    <style>
+      /* Center the entire page */
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        margin: 50px;
+        text-align: center; /* Center-align text */
+        font-family: Arial, sans-serif;
+      }
+
+      /* Container to hold both divs side by side */
+      .container {
+        display: flex;
+        align-items: flex-start; /* Align items to the top */
+        gap: 40px; /* Adds space between the divs */
+        justify-content: center; /* Center the container */
+      }
+
+      /* Optional styling for each div */
+      .result-div {
+        width: 45%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        height: 100vh;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Vertically center the content */
+        align-items: center; /* Horizontally center the content */
+      }
+
+      /* Style for the image inside the div */
+      .result-div img {
+        max-width: 100%; /* Make sure image fits within the container */
+        height: auto; /* Maintain the aspect ratio */
+        border-radius: 10px; /* Optional: rounded corners for the image */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="result-div">
+        <h1>Using SK-Learn (89.63% Accuracy)</h1>
+        <img
+          src="{{ 'static/images/smoking.gif' if smoking_status > 0.5 else 'static/images/nosmoking.gif' }}"
+          alt="Conditional Image"
+        />
+         {% if smoking_status > 0.5 %}
+          <p><strong>This individual is identified as a smoker. Encourage healthier lifestyle choices!</strong></p>
+        {% else %}
+          <p><strong>This individual is identified as a non-smoker. Keep up the healthy habits!</strong></p>
+        {% endif %}
+        <strong>Chance Of Being Somker {{smoking_status*100}}%</strong>
+      </div>
+      <div class="result-div">
+        <h1>Without Using SK-Learn (87.21% Accuracy)</h1>
+        <img
+          src="{{ 'static/images/smoking.gif' if smoking_status > 0.5 else 'static/images/nosmoking.gif' }}"
+          alt="Conditional Image"
+        />
+         {% if smoking_status_scratch > 0.5 %}
+          <p><strong>This individual is identified as a smoker. Encourage healthier lifestyle choices!</strong></p>
+        {% else %}
+          <p><strong>This individual is identified as a non-smoker. Keep up the healthy habits!</strong></p>
+        {% endif %}
+        <strong>Chance Of Being Somker {{smoking_status_scratch*100}}%</strong>
+      </div>
+    </div>
+  </body>
+</html>
